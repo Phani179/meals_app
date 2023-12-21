@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:meals_app/providers/filters_provider.dart';
 
-class FilterItem extends StatelessWidget {
-  const FilterItem({ required this.title, required this.subTitile, required this.filterSet, required this.setFilter, super.key});
+import '../screens/filters.dart';
+
+class FilterItem extends ConsumerWidget {
+  const FilterItem({ required this.title, required this.subTitle, required this.filter, super.key,});
 
   final String title;
-  final String subTitile;
-  final bool filterSet;
-  final void Function(bool) setFilter;
+  final String subTitle;
+  // final bool filterSet;
+  // final void Function(bool) setFilter;
+  final Filter filter;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final notifierRef = ref.watch(filtersProvider.notifier);
+    final filters = ref.watch(filtersProvider);
     return SwitchListTile(
-      value: filterSet,
-      onChanged: setFilter,
+      value: filters[filter]!,
+      onChanged: (isChecked){
+        notifierRef.setFilter(filter, isChecked);
+      },
       title: Text(
         title,
         style: Theme.of(context).textTheme.labelMedium?.copyWith(
@@ -21,7 +30,7 @@ class FilterItem extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        subTitile,
+        subTitle,
         style: Theme.of(context).textTheme.labelMedium?.copyWith(
           color: Theme.of(context).colorScheme.onBackground,
         ),

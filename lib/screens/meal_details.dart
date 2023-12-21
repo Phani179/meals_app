@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:meals_app/modals/meal.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:meals_app/models/meal.dart';
+import 'package:meals_app/providers/favorites_provider.dart';
 
-class MealDetailsScreen extends StatelessWidget {
-  const MealDetailsScreen({ required this.toggleFfavoriteMealsStatus, required this.meal, super.key});
+class MealDetailsScreen extends ConsumerWidget {
+  const MealDetailsScreen({required this.meal, super.key});
 
   final Meal meal;
-  final void Function(Meal) toggleFfavoriteMealsStatus;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isFavoriteMeal = ref.watch(favoriteMealsProvider).contains(meal);
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
-          IconButton(onPressed: (){
-            toggleFfavoriteMealsStatus(meal);
-          }, icon: const Icon(Icons.star)),
+          IconButton(
+              onPressed: () {
+                String message = ref
+                    .read(favoriteMealsProvider.notifier)
+                    .toggleMealFavoriteStatus(meal);
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    duration: const Duration(seconds: 1),
+                    content: Text(message),
+                  ),
+                );
+              },
+              icon: Icon(
+                isFavoriteMeal
+                    ? Icons.star
+                    : Icons.star_border,
+              )),
         ],
       ),
       body: SingleChildScrollView(
@@ -56,21 +72,22 @@ class MealDetailsScreen extends StatelessWidget {
             Text(
               'Steps',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(
               height: 14,
             ),
             for (final step in meal.steps)
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
                   step,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
+                        color: Theme.of(context).colorScheme.onBackground,
+                      ),
                   textAlign: TextAlign.center,
                 ),
               ),

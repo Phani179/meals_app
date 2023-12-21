@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:meals_app/widgets/meal_item_trait.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-import 'package:meals_app/modals/meal.dart';
+import 'package:meals_app/models/meal.dart';
 
 class MealItem extends StatelessWidget {
-  const MealItem({ required this.onSelectCategory, required this.meal, super.key});
+  const MealItem(
+      {required this.onSelectCategory, required this.meal, super.key});
 
   final Meal meal;
 
   final void Function() onSelectCategory;
 
-  String get complexityText => meal.complexity.name[0].toUpperCase() + meal.complexity.name.substring(1);
+  String get complexityText =>
+      meal.complexity.name[0].toUpperCase() + meal.complexity.name.substring(1);
 
-  String get affordabilityText => meal.affordability.name[0].toUpperCase() + meal.affordability.name.substring(1);
+  String get affordabilityText =>
+      meal.affordability.name[0].toUpperCase() +
+      meal.affordability.name.substring(1);
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +55,10 @@ class MealItem extends StatelessWidget {
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                          color: Theme.of(context).colorScheme.onBackground),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
                     ),
                     const SizedBox(
                       height: 5,
