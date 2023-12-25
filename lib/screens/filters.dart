@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:meals_app/screens/tabs.dart';
 import 'package:meals_app/widgets/filter_item.dart';
+
+import '../widgets/main_drawer.dart';
 
 enum Filter { glutenFree, lactoseFree, vegetarian, vegan, }
 
@@ -14,19 +17,19 @@ class FiltersScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Favorites'),
       ),
-      // drawer: MainDrawer(
-      //   onSelectScreen: (String identifier) {
-      //     Navigator.pop(context);
-      //     if (identifier == 'meals') {
-      //       Navigator.pushReplacement(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (ctx) => const TabsScreen(),
-      //         ),
-      //       );
-      //     }
-      //   },
-      // ),
+      drawer: MainDrawer(
+        onSelectScreen: (String identifier) {
+          Navigator.pop(context);
+          if (identifier == 'meals') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (ctx) => const TabsScreen(),
+              ),
+            );
+          }
+        },
+      ),
       body: const Column(
         children: [
           FilterItem(
